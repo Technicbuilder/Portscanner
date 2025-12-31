@@ -20,11 +20,11 @@ while result == 'cancel scan':
 
 if result == True:
     scanner.scan_range()
-    print(f"\n[SCAN COMPLETE] Port status:")
+    print(f"\n\n[SCAN COMPLETE] Port status:")
 
     if scanner.available_ports:
         for port in scanner.available_ports:
-            print(f"[PORT {port}]: [AVAILABLE]✅")
+            print(f"[PORT {port}]: [AVAILABLE]✅ - [SERVICE: {scanner.services[port]}]")
     else:
         print("No open ports available")
 else:
