@@ -45,7 +45,7 @@ def verify_input(scanner):
         accepted = False
 
         while not accepted:
-            print('Scanning anything over 50 ports will take some time')
+            print('Scanning anything over 100ish ports will take some time')
             user_input = input('Do you understand [Y/n]?').lower()
 
             if user_input == 'y':
