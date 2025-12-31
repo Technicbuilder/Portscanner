@@ -39,5 +39,6 @@ class PortScanner:
                                                                                 #   port scanner function above
         for host in self.computers:
             for port in range(int(self.start_port), int(self.end_port) + 1):
-                print(f'Scanning port: [{port}]', end='\r', flush=true)
+                print(f'Scanning port: [{port}]')
+
                 self.scan(host, port)
