@@ -53,8 +53,7 @@ def verify_input(scanner):
             elif user_input == 'n':
                 return 'cancel scan'
             else:
-                print('Input not understood, please try again')
-                print('Scanning anything over 50 ports will take some time')
-                user_input = input('Do you understand [Y/n]?').lower()
+                return 'Input not understood, please try again'
+
 
     return True
