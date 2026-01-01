@@ -1,5 +1,8 @@
+import concurrent
 import socket
 import time
+from concurrent.futures import ThreadPoolExecutor, as_completed
+import sys
 
 class PortScanner:
     def __init__(self):
@@ -29,9 +32,36 @@ class PortScanner:
             sock.close()
 
     def scan_range(self):
+
+        number_of_ports = self.end_port - self.start_port + 1
         print(f'Scanning ports [{self.start_port}] ---> [{self.end_port}]')     #   scans port ranges using the single
         time.sleep(1)                                                           #   port scanner function above
-        for host in self.computers:
-            for port in range(int(self.start_port), int(self.end_port) + 1):
-                print(f'Scanning port: [{port}]')
-                self.scan(host, port)
+
+        if number_of_ports < 100:
+            for host in self.computers:
+                for port in range(int(self.start_port), int(self.end_port) + 1):
+                    print(f'Scanning port: [{port}]')
+                    self.scan(host, port)
+
+        else:
+
+            threads = min(100, number_of_ports)
+            print('This may take dome time...')
+            for host in self.computers:  # ADD loop over hosts for multithreading
+                with ThreadPoolExecutor(max_workers=threads) as executor:  # multithreaded approach
+                    scans = {
+                        executor.submit(self.scan, host, port): port for port in range(self.start_port, self.end_port + 1)
+                    }
+
+                    for future in as_completed(scans):
+                        port = scans[future]
+
+                        try:
+                            future.result()  # ensures exceptions in threads are caught
+
+                        except Exception as e:
+                            print(f'Error scanning port {port}: {e}')
+
+
+
+
