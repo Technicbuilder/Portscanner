@@ -2,7 +2,6 @@ import concurrent
 import socket
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
-import sys
 
 class PortScanner:
     def __init__(self):
@@ -13,20 +12,30 @@ class PortScanner:
         self.instructions = ''
         self.services = {}
 
-
-    def scan(self, host, port, timeout = 0.1):
-        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)    #   scans the port determining whether its
-        sock.settimeout(timeout)                                    #   available or not
+    def scan(self, host, port, timeout=0.1):
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)    #    scans ports determining whether theyre available or not
+        sock.settimeout(timeout)
 
         try:
-            if sock.connect_ex((host, port)) == 0:
+            result = sock.connect_ex((host, port))
+            if result == 0:
                 self.available_ports.append(port)
 
-            try:
-                service_name = socket.getservbyport(port)
-                self.services[port] = service_name
-            except:
-                self.services[port] = "Unknown Service"
+                try:
+                    banner = sock.recv(1024).decode(errors='ignore').strip()    #    retrieves banner
+                    if banner:
+                        self.services[port] = banner
+                    else:
+                        self.services[port] = socket.getservbyport(port)        #    looks up port service if banner is not recieved as backup
+
+                except:
+                    self.services[port] = 'Unknown Service'
+
+        except socket.gaierror:    #    If DNS couldnt resolve the URL/IP given
+            print(f'URL/IP {host} could not be resolved')
+
+        except:
+            pass
 
         finally:
             sock.close()
@@ -46,9 +55,9 @@ class PortScanner:
         else:
 
             threads = min(100, number_of_ports)
-            print('This may take dome time...')
-            for host in self.computers:  # ADD loop over hosts for multithreading
-                with ThreadPoolExecutor(max_workers=threads) as executor:  # multithreaded approach
+            print('This may take some time...')
+            for host in self.computers:
+                with ThreadPoolExecutor(max_workers=threads) as executor:  # multithreaded approach if number of ports to be scanned is > 100
                     scans = {
                         executor.submit(self.scan, host, port): port for port in range(self.start_port, self.end_port + 1)
                     }
