@@ -41,12 +41,12 @@ def verify_input(scanner):
     except (ValueError, IndexError):
         return 'Invalid port range format. Use: START-END'
 
-    if scanner.end_port - scanner.start_port + 1 > 5000:
+    if scanner.end_port - scanner.start_port + 1 > 500:
         accepted = False
 
         while not accepted:
-            print('Scanning anything over 100ish ports will take some time')
-            user_input = input('Do you understand [Y/n]?').lower()
+            print('Scanning anything over 500+ ports will take some time')
+            user_input = input('Do you understand? [Y/n] ').lower()
 
             if user_input == 'y':
                 accepted = True
@@ -57,4 +57,3 @@ def verify_input(scanner):
 
 
     return True
-
