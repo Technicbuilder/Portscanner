@@ -53,7 +53,7 @@ class PortScanner:
     def scan_range(self):
 
         number_of_ports = self.end_port - self.start_port + 1                   #   scans port ranges using the single
-        if number_of_ports < 100:                                               #   port scanner function above
+        if number_of_ports < 500:                                               #   port scanner function above
             for host in self.computers:
                 for port in range(int(self.start_port), int(self.end_port) + 1):
                     self.scan(host, port)
@@ -75,6 +75,7 @@ class PortScanner:
 
                         except Exception as e:
                             return f'Error scanning port {port}: {e}'
+
 
 
 
