@@ -5,7 +5,7 @@ print('Welcome to Port Scanner')
 print('Please enter the host you want to scan, followed by the port you want to scan, observe this example below')
 print('scan (IP address or Domain name) -p 34-65635   | or for one port | scan 192.168.4.27 -p 34-34 ')
 
-user_input = input('\n')
+user_input = input('\n>>>> ')
 
 scanner = PortScanner()
 scanner.instructions = user_input
@@ -19,6 +19,10 @@ while result == 'cancel scan':
     result = verify_input(scanner)
 
 if result == True:
+    print(f'Scanning ports [{scanner.start_port}] ---> [{scanner.end_port}]')
+    total_ports = scanner.end_port - scanner.start_port
+    if total_ports:
+        print('This may take some time...')
     scanner.scan_range()
     print(f"\n\n[SCAN COMPLETE] Port status:")
 
