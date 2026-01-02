@@ -21,7 +21,7 @@ while result == 'cancel scan':
 if result == True:
     print(f'Scanning ports [{scanner.start_port}] ---> [{scanner.end_port}]')
     total_ports = scanner.end_port - scanner.start_port
-    if total_ports > 5000:
+    if total_ports > 500:
         print('This may take some time...')
     scanner.scan_range()
     print(f"\n\n[SCAN COMPLETE] Port status:")
@@ -33,4 +33,5 @@ if result == True:
         print("No open ports available")
 else:
     print(result)
+
 
