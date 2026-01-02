@@ -13,7 +13,7 @@ class PortScanner:
         self.services = {}
 
     def scan(self, host, port, timeout=0.1):
-        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)    #    scans ports determining whether theyre available or not
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         sock.settimeout(timeout)
 
         try:
@@ -22,17 +22,27 @@ class PortScanner:
                 self.available_ports.append(port)
 
                 try:
-                    banner = sock.recv(1024).decode(errors='ignore').strip()    #    retrieves banner
+                    sock.send(b'\r\n')
+                    banner = sock.recv(1024).decode(errors='ignore').strip()
+
                     if banner:
                         self.services[port] = banner
                     else:
-                        self.services[port] = socket.getservbyport(port)        #    looks up port service if banner is not recieved as backup
+                        try:
+                            self.services[port] = socket.getservbyport(port)
+
+                        except:
+                            self.services[port] = "Uknown Service"
 
                 except:
-                    self.services[port] = 'Unknown Service'
+                    try:
+                        self.services[port] = socket.getservbyport(port)
 
-        except socket.gaierror:    #    If DNS couldnt resolve the URL/IP given
-            print(f'URL/IP {host} could not be resolved')
+                    except:
+                        self.services[port] = 'Uknown Service'
+
+        except socket.gaierror:
+            return f'URL/IP {host} could not be resolved'
 
         except:
             pass
@@ -42,20 +52,15 @@ class PortScanner:
 
     def scan_range(self):
 
-        number_of_ports = self.end_port - self.start_port + 1
-        print(f'Scanning ports [{self.start_port}] ---> [{self.end_port}]')     #   scans port ranges using the single
-        time.sleep(1)                                                           #   port scanner function above
-
-        if number_of_ports < 100:
+        number_of_ports = self.end_port - self.start_port + 1                   #   scans port ranges using the single
+        if number_of_ports < 100:                                               #   port scanner function above
             for host in self.computers:
                 for port in range(int(self.start_port), int(self.end_port) + 1):
-                    print(f'Scanning port: [{port}]')
                     self.scan(host, port)
 
         else:
 
             threads = min(100, number_of_ports)
-            print('This may take some time...')
             for host in self.computers:
                 with ThreadPoolExecutor(max_workers=threads) as executor:  # multithreaded approach if number of ports to be scanned is > 100
                     scans = {
@@ -69,8 +74,7 @@ class PortScanner:
                             future.result()  # ensures exceptions in threads are caught
 
                         except Exception as e:
-                            print(f'Error scanning port {port}: {e}')
-
+                            return f'Error scanning port {port}: {e}'
 
 
 
