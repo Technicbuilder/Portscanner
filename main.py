@@ -27,11 +27,9 @@ if result == True:
     print(f"\n\n[SCAN COMPLETE] Port status:")
 
     if scanner.available_ports:
-        for port in scanner.available_ports:
-            print(f"[PORT {port}]: [AVAILABLE]✅ - [SERVICE: {scanner.services[port]}]")
+        for port, protocol in scanner.available_ports:
+            print(f"[PORT {port}, {protocol.upper()}]: [AVAILABLE]✅ - [SERVICE: {scanner.services[port, protocol]}]")
     else:
         print("No open ports available")
 else:
     print(result)
-
-
