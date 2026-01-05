@@ -17,6 +17,8 @@ def main():
     if user_input == 'help':
         print('Please enter the host you want to scan, followed by the port you want to scan, observe this example below')
         print('scan (IP address or Domain name) -p 34-65635   | or for one port | scan 192.168.4.27 -p 34-34 or \'q\' to exit ')
+        print('If you would like to scan more than one host follow the example below')
+        print('scan -m (host_1, host_2, host_3, ...) -p start_port-end_port')
 
     scanner = PortScanner()
     scanner.instructions = user_input
@@ -50,4 +52,5 @@ def main():
 while True:
     if main() == 'q':
         break
+
 
