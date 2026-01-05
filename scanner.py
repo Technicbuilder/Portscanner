@@ -2,6 +2,9 @@ import concurrent
 import socket
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
+import json
+import os
+import datetime
 
 class PortScanner:
     def __init__(self):
@@ -11,6 +14,18 @@ class PortScanner:
         self.available_ports = []
         self.instructions = ''
         self.services = {}
+        self.payloads = self.payload('udp_payload.json')
+
+    def payload(self, file):
+        try:
+            with open(file, 'r') as f:
+                data = json.load(f)
+                formatted_payload = {int(k): bytes.fromhex(v) for k, v in data.items()}
+                return formatted_payload
+
+        except FileNotFoundError:
+            print('udp_payload.json not found')
+            return {}
 
     def scan_TCP(self, host, port, timeout=2):
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -53,9 +68,10 @@ class PortScanner:
     def scan_UDP(self, host, port, timeout=2):
         sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         sock.settimeout(timeout)
+        message = self.payloads.get(port, b'hello')
 
         try:
-            sock.sendto(b'', (host, port))
+            sock.sendto(message, (host, port))
             sock.recvfrom(1024) #   if open
             self.available_ports.append((port, 'udp'))
 
@@ -104,3 +120,22 @@ class PortScanner:
 
                         except Exception as e:
                             return f'Error scanning port {port}: {e}'
+
+
+    def output_results(self):
+        data_to_output = {
+            f'SCAN: {datetime.datetime.now().strftime("%m/%d/%Y %H")}': {
+                'host': self.computers,
+                'number of open ports': len(self.available_ports),
+                'open ports': self.available_ports,
+                'service_details': {f'{port.upper(), protocol}': service for (port, protocol), service in self.services.items()}
+            }
+        }
+        try:
+            with open('scanner-results.json', 'w') as f:
+                json.dump(data_to_output, f, indent=4)
+
+        except Exception as e:
+            print(f'Error writing results to scanner-results.json: {e}')
+
+
