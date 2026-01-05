@@ -31,5 +31,7 @@ if result == True:
             print(f"[PORT {port}, {protocol.upper()}]: [AVAILABLE]✅ - [SERVICE: {scanner.services[port, protocol]}]")
     else:
         print("No open ports available")
+    scanner.output_results()
 else:
     print(result)
+
