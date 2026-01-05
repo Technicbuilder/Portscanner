@@ -128,7 +128,7 @@ class PortScanner:
                 'host': self.computers,
                 'number of open ports': len(self.available_ports),
                 'open ports': self.available_ports,
-                'service_details': {f'{port.upper(), protocol}': service for (port, protocol), service in self.services.items()}
+                'service_details': {f'{port, protocol}': service for (port, protocol), service in self.services.items()}
             }
         }
         try:
@@ -137,5 +137,6 @@ class PortScanner:
 
         except Exception as e:
             print(f'Error writing results to scanner-results.json: {e}')
+
 
 
