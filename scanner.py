@@ -47,14 +47,14 @@ class PortScanner:
                             self.services[(port, 'tcp')] = socket.getservbyport(port)
 
                         except:
-                            self.services[(port, 'tcp')] = "Uknown Service"
+                            self.services[(port, 'tcp')] = "Unknown Service"
 
                 except:
                     try:
                         self.services[(port, 'tcp')] = socket.getservbyport(port)
 
                     except:
-                        self.services[(port, 'tcp')] = 'Uknown Service'
+                        self.services[(port, 'tcp')] = 'Unknown Service'
 
         except socket.gaierror:
             return f'URL/IP {host} could not be resolved'
@@ -79,7 +79,7 @@ class PortScanner:
                 self.services[(port, 'udp')] = socket.getservbyport(port, 'udp')
 
             except:
-                self.services[(port, 'udp')] = 'Uknown Service'
+                self.services[(port, 'udp')] = 'Unknown Service'
 
         except socket.timeout:
             pass    #   port has been opened or filtered
@@ -121,19 +121,32 @@ class PortScanner:
                         except Exception as e:
                             return f'Error scanning port {port}: {e}'
 
-
     def output_results(self):
         data_to_output = {
-            f'SCAN: {datetime.datetime.now().strftime("%m/%d/%Y %H")}': {
+            f'SCAN: {datetime.datetime.now().strftime("%m/%d/%Y %H:%M:%S")}': {
                 'host': self.computers,
                 'number of open ports': len(self.available_ports),
                 'open ports': self.available_ports,
-                'service_details': {f'{port, protocol}': service for (port, protocol), service in self.services.items()}
+                'service_details': {
+                    f'{port, protocol}': service
+                    for (port, protocol), service in self.services.items()
+                }
             }
         }
+
         try:
+            existing_data = {}
+
+            try:
+                with open('scanner-results.json', 'r') as f:
+                    existing_data = json.load(f)
+            except (FileNotFoundError, json.JSONDecodeError):
+                pass
+
+            existing_data.update(data_to_output)
+
             with open('scanner-results.json', 'w') as f:
-                json.dump(data_to_output, f, indent=4)
+                json.dump(existing_data, f, indent=4)
 
         except Exception as e:
             print(f'Error writing results to scanner-results.json: {e}')
