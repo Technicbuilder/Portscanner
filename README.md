@@ -12,8 +12,8 @@ Features:
 ---------------------------------------------------------------------------------------
 Upcoming features to implement:
 
--> Going to add UDP port scanning
--> Going to make results accessible from a json file
+-> Going to add a continous use feature
+-> going to  add multiple host scanning
 ---------------------------------------------------------------------------------------
 How to use:
 
@@ -26,7 +26,7 @@ Other:
 For ethical/Cybersecurity uses only
 Anyone can use this I dont mind
 I dont mind using AI to fix mistakes etc but I dont condone its use if you are going to
-make it generate the whole thing for you - you should know what you made
+make it generate the whole thing for you - you should know what it made before implementing it
 -----------------------------------------------------------------------------------------
 
 
