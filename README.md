@@ -9,11 +9,12 @@ Features:
 -> Attempts to grab the banner from the service running on a port and displays it
 -> If the service lookup fails, it will use socket.getservbyport
 -> Makes use of mutithreading if user requests to scan > 500 ports
+-> Scans both TCP and UDP ports
+-> Uses JSON files if you want to extract the data from what you have done
 ---------------------------------------------------------------------------------------
 Upcoming features to implement:
 
--> Going to add a continous use feature
--> going to  add multiple host scanning
+-> going to add multiple host scanning (FINAL FEATURE BEFORE DISCONTINUEATION)
 ---------------------------------------------------------------------------------------
 How to use:
 
