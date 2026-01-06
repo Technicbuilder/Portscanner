@@ -1,6 +1,6 @@
 # Portscanner
 
-A basic TCP port scanner (simple imitation of what Nmap does)
+A basic TCP/UDP port scanner (simple imitation of what Nmap does)
 
 ---------------------------------------------------------------------------------------
 Features:
@@ -13,8 +13,7 @@ Features:
 -> Uses JSON files if you want to extract the data from what you have done
 ---------------------------------------------------------------------------------------
 Upcoming features to implement:
-
--> going to add multiple host scanning (FINAL FEATURE BEFORE DISCONTINUEATION)
+DISCONTINUED (06/01/2026)
 ---------------------------------------------------------------------------------------
 How to use:
 
