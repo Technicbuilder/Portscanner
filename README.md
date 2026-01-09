@@ -24,7 +24,6 @@ example: scan google.com -p 1-1000
 Other:
 
 For ethical/Cybersecurity uses only
-Anyone can use this I dont mind
 I dont mind using AI to fix mistakes etc but I dont condone its use if you are going to
 make it generate the whole thing for you - you should know what it made before implementing it
 -----------------------------------------------------------------------------------------
